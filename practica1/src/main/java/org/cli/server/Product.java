@@ -10,6 +10,8 @@ public class Product {
     private double price;
     private int stock;
 
+    private String imageUrl;
+
     // Constructores
     public Product() {}
     public Product(int id, String name, String type, String brand, String info, double price, int stock) {
@@ -20,6 +22,7 @@ public class Product {
         this.info = info;
         this.price = price;
         this.stock = stock;
+        this.imageUrl = imageUrl;
     }
 
     // Funciones
@@ -42,4 +45,5 @@ public class Product {
     public String getInfo() { return info; }
     public double getPrice() { return price; }
     public int getStock() { return stock; }
+    public String getImageUrl() { return imageUrl; }
 }
