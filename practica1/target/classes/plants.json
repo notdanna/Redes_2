@@ -1,0 +1,187 @@
+[
+  {
+    "id": 100,
+    "name": "Orquídea Phalaenopsis",
+    "type": "Interior",
+    "brand": "Flores del Valle",
+    "info": "Orquídea elegante de interior",
+    "price": 25.0,
+    "stock": 15
+  },
+  {
+    "id": 101,
+    "name": "Helecho Boston",
+    "type": "Interior",
+    "brand": "EcoPlant",
+    "info": "Helecho frondoso de fácil mantenimiento",
+    "price": 18.0,
+    "stock": 25
+  },
+  {
+    "id": 102,
+    "name": "Lirio Blanco",
+    "type": "Interior",
+    "brand": "Florencia Co.",
+    "info": "Flor elegante de aroma suave",
+    "price": 14.0,
+    "stock": 22
+  },
+  {
+    "id": 103,
+    "name": "Sansevieria",
+    "type": "Interior",
+    "brand": "GreenHouse Co.",
+    "info": "Planta de hojas resistentes, purificadora de aire",
+    "price": 16.0,
+    "stock": 25
+  },
+  {
+    "id": 104,
+    "name": "Begonia",
+    "type": "Interior",
+    "brand": "EcoPlant",
+    "info": "Planta de interior con flores llamativas",
+    "price": 12.0,
+    "stock": 20
+  },
+
+  {
+    "id": 200,
+    "name": "Bonsái Ficus",
+    "type": "Decorativa",
+    "brand": "Jardín Zen",
+    "info": "Mini árbol para interiores",
+    "price": 45.0,
+    "stock": 10
+  },
+  {
+    "id": 201,
+    "name": "Bambú de la Suerte",
+    "type": "Decorativa",
+    "brand": "ZenHouse",
+    "info": "Bambú ornamental que atrae prosperidad",
+    "price": 20.0,
+    "stock": 18
+  },
+  {
+    "id": 202,
+    "name": "Peonía Rosa",
+    "type": "Decorativa",
+    "brand": "Flores del Valle",
+    "info": "Flor ornamental con pétalos abundantes",
+    "price": 22.0,
+    "stock": 14
+  },
+
+  {
+    "id": 300,
+    "name": "Cactus Espiral",
+    "type": "Suculenta",
+    "brand": "Vivero Verde",
+    "info": "Cactus decorativo, fácil de cuidar",
+    "price": 12.5,
+    "stock": 20
+  },
+  {
+    "id": 301,
+    "name": "Suculenta Jade",
+    "type": "Suculenta",
+    "brand": "Vivero Verde",
+    "info": "Planta pequeña de hojas carnosas",
+    "price": 9.0,
+    "stock": 40
+  },
+
+  {
+    "id": 400,
+    "name": "Aloe Vera",
+    "type": "Medicinal",
+    "brand": "GreenHouse Co.",
+    "info": "Planta suculenta con propiedades medicinales",
+    "price": 10.0,
+    "stock": 30
+  },
+
+  {
+    "id": 501,
+    "name": "Lavanda",
+    "type": "Aromática",
+    "brand": "Aromas Naturales",
+    "info": "Planta aromática ideal para interiores y jardines",
+    "price": 15.0,
+    "stock": 12
+  },
+  {
+    "id": 502,
+    "name": "Menta",
+    "type": "Aromática",
+    "brand": "Herbolario Natural",
+    "info": "Hierba fresca ideal para infusiones",
+    "price": 5.5,
+    "stock": 45
+  },
+  {
+    "id": 503,
+    "name": "Romero",
+    "type": "Aromática",
+    "brand": "EcoHerbs",
+    "info": "Hierba aromática usada en cocina",
+    "price": 6.0,
+    "stock": 50
+  },
+
+    {
+    "id": 600,
+    "name": "Rosa Roja",
+    "type": "Exterior",
+    "brand": "Flora Bella",
+    "info": "Clásica flor roja de jardín",
+    "price": 8.0,
+    "stock": 50
+  },
+  {
+    "id": 601,
+    "name": "Tulipán Amarillo",
+    "type": "Exterior",
+    "brand": "TulipWorld",
+    "info": "Tulipán brillante para decorar jardines",
+    "price": 9.5,
+    "stock": 40
+  },
+  {
+    "id": 602,
+    "name": "Girasol",
+    "type": "Exterior",
+    "brand": "Campo Feliz",
+    "info": "Flor alta y luminosa, símbolo del sol",
+    "price": 7.0,
+    "stock": 35
+  },
+  {
+    "id": 603,
+    "name": "Geranio",
+    "type": "Exterior",
+    "brand": "Flora Bella",
+    "info": "Planta colorida ideal para balcones",
+    "price": 11.0,
+    "stock": 28
+  },
+  {
+    "id": 604,
+    "name": "Camellia",
+    "type": "Exterior",
+    "brand": "Jardín Zen",
+    "info": "Planta ornamental de flores grandes",
+    "price": 19.0,
+    "stock": 20
+  },
+  {
+    "id": 605,
+    "name": "Crisantemo",
+    "type": "Exterior",
+    "brand": "Flora Bella",
+    "info": "Flor de múltiples colores, símbolo de longevidad",
+    "price": 13.5,
+    "stock": 30
+  }
+]
