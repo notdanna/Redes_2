@@ -1,0 +1,6 @@
+org/cli/server/Product.class
+org/cli/server/Items$1.class
+org/cli/server/Items.class
+org/cli/server/ClientHandler.class
+org/cli/server/Server.class
+org/cli/client/Client.class
