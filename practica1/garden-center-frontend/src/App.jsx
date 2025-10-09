@@ -103,8 +103,9 @@ function App() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Garden Center</h1>
-          <p className="text-gray-600">Find the perfect plants for your space</p>
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">Plantas y Sockets c:</h1>
+          <p className="text-gray-600">Franco Rayas Angel Damian</p>
+          <p className="text-gray-600">González Cruz Joshua Raúl</p>
         </div>
 
         <SearchBar onSearch={handleSearch} />
