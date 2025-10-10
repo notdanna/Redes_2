@@ -21,7 +21,7 @@ public class Items {
                 this.items.putAll(loaded.items);
                 return;
             }
-            System.err.println("Archivo " + path + " JSON no enconrado");
+            System.err.println("Archivo " + path + " JSON no encontrado");
         } catch(Exception e) {
             System.err.println("No fue posible cargar el archivo JSON: " + e.getMessage());
         }
@@ -34,13 +34,13 @@ public class Items {
     /* FUNCIONES */
     // Carga el inventario con un JSON
     public static Items fromJson(InputStream in) throws Exception {
-        ObjectMapper mapper = new ObjectMapper(); 
+        ObjectMapper mapper = new ObjectMapper();
         List<Product> inventory = mapper.readValue(in, new TypeReference<List<Product>>() {});
-        Items it = new Items(); 
+        Items it = new Items();
 
         for (Product p : inventory) {
-            if (p == null) continue; 
-            
+            if (p == null) continue;
+
             // Validar que los campos sean válidos
             if (p.getId() <= 0)
                 throw new IllegalArgumentException("Invalid or missing product ID in JSON");
@@ -56,7 +56,7 @@ public class Items {
                 throw new IllegalArgumentException("Negative price for product in JSON (id=" + p.getId() + ")");
             if (p.getStock() < 0)
                 throw new IllegalArgumentException("Negative stock for product in JSON (id=" + p.getId() + ")");
-            
+
             // Detecta IDs duplicados
             if (it.items.putIfAbsent(p.getId(), p) != null)
                 throw new IllegalArgumentException("ID de producto duplicado en JSON: " + p.getId());
@@ -67,12 +67,13 @@ public class Items {
     // Carga el inventario por defecto
     public static Items defaultItems() {
         Items it = new Items();
-        it.add(101, new Product(101, "Cactus Espiral", "Suculenta", "Vivero Verde", "Cactus decorativo, fácil de cuidar", 12.5, 20));
-        it.add(102, new Product(102, "Orquídea Phalaenopsis", "Interior", "Flores del Valle", "Orquídea elegante de interior", 25.0, 15));
-        it.add(103, new Product(103, "Bonsái Ficus", "Decorativa", "Jardín Zen", "Mini árbol para interiores", 45.0, 10));
-        it.add(104, new Product(104, "Helecho Boston", "Interior", "EcoPlant", "Helecho frondoso de fácil mantenimiento", 18.0, 25));
-        it.add(105, new Product(105, "Aloe Vera", "Medicinal", "GreenHouse Co.", "Planta suculenta con propiedades medicinales", 10.0, 30));
-        it.add(106, new Product(106, "Lavanda", "Aromática", "Aromas Naturales", "Planta aromática ideal para interiores y jardines", 15.0, 12));
+        // Ahora usando el constructor de 8 parámetros (agregando imageUrl)
+        it.add(101, new Product(101, "Cactus Espiral", "Suculenta", "Vivero Verde", "Cactus decorativo, fácil de cuidar", 12.5, 20, "/images/cactus.jpg"));
+        it.add(102, new Product(102, "Orquídea Phalaenopsis", "Interior", "Flores del Valle", "Orquídea elegante de interior", 25.0, 15, "/images/orquidea.jpg"));
+        it.add(103, new Product(103, "Bonsái Ficus", "Decorativa", "Jardín Zen", "Mini árbol para interiores", 45.0, 10, "/images/bonsai.jpg"));
+        it.add(104, new Product(104, "Helecho Boston", "Interior", "EcoPlant", "Helecho frondoso de fácil mantenimiento", 18.0, 25, "/images/helecho.jpg"));
+        it.add(105, new Product(105, "Aloe Vera", "Medicinal", "GreenHouse Co.", "Planta suculenta con propiedades medicinales", 10.0, 30, "/images/aloe.jpg"));
+        it.add(106, new Product(106, "Lavanda", "Aromática", "Aromas Naturales", "Planta aromática ideal para interiores y jardines", 15.0, 12, "/images/lavanda.jpg"));
         return it;
     }
 
@@ -94,9 +95,9 @@ public class Items {
 
         for (Map.Entry<Integer, Product> entry : items.entrySet()) {
             Product p = entry.getValue();
-            if(p.getName().toLowerCase().contains(newName)  || 
-               p.getBrand().toLowerCase().contains(newName) ||
-               (isID && Integer.parseInt(name) == entry.getKey()))
+            if(p.getName().toLowerCase().contains(newName)  ||
+                    p.getBrand().toLowerCase().contains(newName) ||
+                    (isID && Integer.parseInt(name) == entry.getKey()))
                 aux.put(entry.getKey(), p);
         }
 

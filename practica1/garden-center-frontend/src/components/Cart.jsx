@@ -26,7 +26,7 @@ function Cart({ cart, onClose, onUpdateCart, onCheckout }) {
                 <div key={item.id} className="flex gap-4 p-4 border rounded-lg">
                   <div className="w-20 h-20 bg-gray-100 rounded flex-shrink-0 overflow-hidden">
                       <img 
-                        src={`http://localhost:8080${item.imageUrl}`}
+                        src={`http://localhost:8081${item.imageUrl}`}
                         alt={item.name}
                         className="w-full h-full object-cover"
                       />
