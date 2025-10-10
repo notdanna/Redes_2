@@ -1,20 +1,24 @@
 package org.cli.server;
-
 import java.net.Socket;
 import java.util.*;
 import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-// Maneja la conexión de un cliente con el servidor CLI
+// Maneja la conexión de un cliente con el servidor
 public class ClientHandler {
+    /* ATRIBUTOS */
     private final Socket socket;
-    private final BusinessLogic logic;
+    private final Items items;
+    private final Map<Integer, Integer> cart = new TreeMap<>();
 
+    /* CONSTRUCTORES */
     public ClientHandler(Socket socket, Items items) {
         this.socket = socket;
-        Map<Integer, Integer> cart = new TreeMap<>();
-        this.logic = new BusinessLogic(items, cart);
+        this.items = items;
     }
 
+    /* FUNCIONES */
     // Inicia la comunicación con el cliente, recibe comandos y envía respuestas
     public void handle() {
         String line;
@@ -28,13 +32,19 @@ public class ClientHandler {
                 String res = handleCommand(line.trim());
                 out.println(res);
 
-                if (res.equals("¡Sesión cerrada exitosamente!"))
-                    break;
+                if (res.equals("¡Sesión cerrada exitosamente!")) {
+                    handleExit();
+                    break; 
+                }
+                    
             }
         }
         catch (IOException ignored) {
         } finally {
-            try { socket.close(); } catch (IOException ignored) {}
+            try { 
+                socket.close();
+                handleExit();
+            } catch (IOException ignored) {} // libera el socket
         }
     }
 
@@ -43,39 +53,44 @@ public class ClientHandler {
         if(line.isEmpty()) return "Error";
         String[] parts = line.trim().split("\\s");
         String cmd = parts[0].toUpperCase();
+        Map<Integer, Product> res;
 
         String value = "";
         if(parts.length > 1)
             value = String.join(" ", Arrays.copyOfRange(parts, 1, parts.length));
 
-        return switch(cmd) {
-            case "SEARCH" -> handleSearch(value);
-            case "LIST" -> handleList(value);
-            case "ADD" -> handleAdd(parts);
-            case "VIEW" -> handleView();
-            case "UPDATE" -> handleUpdate(parts);
-            case "CHECKOUT" -> handleCheckout();
-            case "EXIT" -> "¡Sesión cerrada exitosamente!";
-            default -> "Error: Ingresa un comando válido :(";
-        };
+        switch(cmd) {
+            case "SEARCH" -> { return handleSearch(value); }
+            case "LIST" -> { return handleList(value); } 
+            case "ADD" -> { return handleAdd(parts); }
+            case "VIEW" -> { return handleView(); }
+            case "UPDATE" -> { return handleUpdate(parts); }
+            case "CHECKOUT" -> { return handleCheckout(); }
+            case "EXIT" -> { 
+                handleExit();
+                return "¡Sesión cerrada exitosamente!";
+             }
+            default -> { return "Error: Ingresa un comando válido :("; }
+        }
     }
 
     // Maneja el comando de búsqueda por nombre, marca y ID
     private String handleSearch(String value) {
         if(value.isEmpty()) return "Error: SEARCH [name|brand|ID]";
-
-        Map<Integer, Product> res = logic.searchProducts(value);
+        
+        Map<Integer, Product> res = items.find(value);
+        res = items.find(value);
         if(res.isEmpty())
             return "Lo sentimos, no encontramos ningún producto";
 
         StringBuilder sb = new StringBuilder(String.format("%d producto%s encontrado%s\n",
-                res.size(),
-                res.size() == 1 ? "" : "s",
-                res.size() == 1 ? "" : "s")
+                    res.size(),
+                    res.size() == 1 ? "" : "s",
+                    res.size() == 1 ? "" : "s")
         );
 
         for(Product p : res.values())
-            sb.append(p).append("\n");
+            sb.append(p + "\n");
 
         return sb.toString().trim();
     }
@@ -84,24 +99,24 @@ public class ClientHandler {
     private String handleList(String value) {
         Map<Integer, Product> res;
         if(value.isEmpty()) {
-            res = logic.listAllProducts();
+            res = items.getItems();
             if(res.isEmpty())
                 return "Lo sentimos, el inventario está vacío :(";
         }
         else {
-            res = logic.listProductsByType(value);
-            if(res.isEmpty())
+            res = items.findByType(value);
+            if(res.isEmpty()) 
                 return "Lo sentimos, no encontramos el tipo solicitado :(";
         }
 
         StringBuilder sb = new StringBuilder(String.format("%d producto%s encontrado%s\n",
-                res.size(),
-                res.size() == 1 ? "" : "s",
-                res.size() == 1 ? "" : "s")
+                    res.size(),
+                    res.size() == 1 ? "" : "s",
+                    res.size() == 1 ? "" : "s")
         );
 
         for(Product p : res.values())
-            sb.append(p).append("\n");
+            sb.append(p + "\n");
 
         return sb.toString().trim();
     }
@@ -110,30 +125,31 @@ public class ClientHandler {
     private String handleAdd(String[] parts) {
         if(parts.length != 3)
             return "Error: ADD [ID] [quantity]";
+        
+        int id = Integer.parseInt(parts[1]);
+        int qty = Integer.parseInt(parts[2]);
 
-        try {
-            int id = Integer.parseInt(parts[1]);
-            int qty = Integer.parseInt(parts[2]);
-
-            BusinessLogic.AddToCartResult result = logic.addToCart(id, qty);
-            return result.success ? result.message : "Error: " + result.message;
-        } catch (NumberFormatException e) {
-            return "Error: ID y cantidad deben ser números";
+        int ok = items.addToCart(id, qty);
+        if(ok == 0)       return "Error: Producto no encontrado";
+        else if(ok == -1) return "Error: El producto no cuenta con suficientes existencias";
+        else {
+            int curr = cart.getOrDefault(id, 0);
+            cart.put(id, curr + qty);
+            return "Producto agregado correctamente al carrito!";
         }
     }
 
     // Maneja el comando de ver el carrito
     private String handleView() {
-        Map<Integer, Integer> cart = logic.getCart();
         if(cart.isEmpty())
             return "¡El carrito está vacío!";
-
+        
         StringBuilder sb = new StringBuilder(String.format("%d producto%s en el carrito\n",
-                cart.size(),
-                cart.size() == 1 ? "" : "s")
+                    cart.size(),
+                    cart.size() == 1 ? "" : "s")
         );
         for(Map.Entry<Integer, Integer> entry : cart.entrySet()) {
-            Product p = logic.getProductById(entry.getKey());
+            Product p = items.findById(entry.getKey());
             sb.append(String.format("#%d - %s (x%d)\n", entry.getKey(), p.getName(), entry.getValue()));
         }
         return sb.toString().trim();
@@ -143,49 +159,73 @@ public class ClientHandler {
     private String handleUpdate(String[] parts) {
         if(parts.length != 3)
             return "Error: UPDATE [ID] [qty]";
-
-        Map<Integer, Integer> cart = logic.getCart();
         if(cart.isEmpty())
             return "El carrito está vacío";
+        
+        int id = Integer.parseInt(parts[1]);
+        int qty = Integer.parseInt(parts[2]);
 
-        try {
-            int id = Integer.parseInt(parts[1]);
-            int qty = Integer.parseInt(parts[2]);
-
-            BusinessLogic.UpdateCartResult result = logic.updateCart(id, qty);
-            return result.success ? result.message : "Error: " + result.message;
-        } catch (NumberFormatException e) {
-            return "Error: ID y cantidad deben ser números";
+        if(!cart.containsKey(id))
+            return "Error: Producto no se encuentra en el carrito!";
+        
+        if(qty <= 0) {
+            items.returnFromCart(id, cart.get(id));
+            cart.remove(id);
+            return "Producto eliminado del carrito!";
+        }
+        else {
+            int curr = cart.getOrDefault(id, 0);
+            int ok = items.addToCart(id, qty - curr);
+            if (ok == -1) {
+                int mn = items.findById(id).getStock();
+                items.addToCart(id, mn);
+                cart.put(id, curr + mn);
+                return "No hay suficientes existencias, se agregaron " + mn + " al carrito!";
+            }
+            cart.put(id, qty);
+            return "Cantidades agregadas correctamente!";
         }
     }
 
     // Maneja el comando para finalizar la compra
     private String handleCheckout() {
-        BusinessLogic.CheckoutResult result = logic.checkout();
+        if(cart.isEmpty())
+            return "Error: El carrito está vacío";
 
-        if (!result.success) {
-            return "Error: " + result.message;
-        }
-
+        String datetime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         StringBuilder sb = new StringBuilder();
         sb.append("================================================\n");
         sb.append("TICKET\n");
-        sb.append(result.datetime).append("\n");
+        sb.append(datetime).append("\n");
         sb.append("------------------------------------------------\n");
 
         // Cabecera de la tabla
         sb.append(String.format("%-4s | %-25s | %-3s | %-8s\n", "ID", "Producto", "Qty", "Subtotal"));
         sb.append("------------------------------------------------\n");
 
-        for(BusinessLogic.CheckoutItem item : result.items) {
-            sb.append(String.format("%-4d | %-25s | %-3d | $%-7.2f\n",
-                    item.id, item.name, item.quantity, item.subtotal));
+        double total = 0.0;
+
+        for(Map.Entry<Integer, Integer> entry : cart.entrySet()) {
+            Product p = items.findById(entry.getKey());
+            double curr = p.getPrice() * entry.getValue();
+            sb.append(String.format("%-4d | %-25s | %-3d | $%-7.2f\n", p.getId(), p.getName(), entry.getValue(), curr));
+            total += curr;
         }
 
         sb.append("------------------------------------------------\n");
-        sb.append(String.format("%-35s | $%-7.2f\n", "TOTAL", result.total));
+        sb.append(String.format("%-35s | $%-7.2f\n", "TOTAL", total));
         sb.append("================================================\n");
+        cart.clear();
 
         return sb.toString();
+    }
+
+    private void handleExit() {
+        // Si el carrito no está vacío, regresa sus elementos
+        if(cart.isEmpty()) return;
+        for(Map.Entry<Integer, Integer> entry : cart.entrySet()) {
+            items.returnFromCart(entry.getKey(), entry.getValue());
+        }
+        cart.clear();
     }
 }
