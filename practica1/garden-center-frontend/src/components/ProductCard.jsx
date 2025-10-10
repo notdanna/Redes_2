@@ -21,11 +21,11 @@ function ProductCard({ product, onAddToCart }) {
       {/* CORREGIDO: Contenedor único con posición relativa */}
       <div className="aspect-square bg-gray-100 relative overflow-hidden">
         <img 
-          src={`http://localhost:8080${product.imageUrl}`}
+          src={`http://localhost:8081${product.imageUrl}`}
           alt={product.name}
           className="w-full h-full object-cover absolute inset-0"
           onError={(e) => {
-            console.error('Error loading image:', `http://localhost:8080${product.imageUrl}`);
+            console.error('Error loading image:', `http://localhost:8081${product.imageUrl}`);
             e.target.style.display = 'none';
             e.target.nextElementSibling.style.display = 'flex';
           }}

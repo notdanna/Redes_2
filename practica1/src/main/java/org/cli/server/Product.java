@@ -14,7 +14,7 @@ public class Product {
 
     // Constructores
     public Product() {}
-    public Product(int id, String name, String type, String brand, String info, double price, int stock) {
+    public Product(int id, String name, String type, String brand, String info, double price, int stock, String imageUrl) {
         this.id = id;
         this.name = name;
         this.type = type;
