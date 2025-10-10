@@ -1,8 +1,10 @@
+/home/nomad/Documents/Redes2/Redes_2/practica1/src/main/java/org/api/server/HttpSocketServer.java
 /home/nomad/Documents/Redes2/Redes_2/practica1/src/main/java/org/example/server/ShopServer.java
 /home/nomad/Documents/Redes2/Redes_2/practica1/src/main/java/org/example/server/Catalog.java
 /home/nomad/Documents/Redes2/Redes_2/practica1/src/main/java/org/example/client/ShopClient.java
 /home/nomad/Documents/Redes2/Redes_2/practica1/src/main/java/org/cli/server/Items.java
 /home/nomad/Documents/Redes2/Redes_2/practica1/src/main/java/org/example/server/Product.java
+/home/nomad/Documents/Redes2/Redes_2/practica1/src/main/java/org/cli/server/BusinessLogic.java
 /home/nomad/Documents/Redes2/Redes_2/practica1/src/main/java/org/cli/server/Server.java
 /home/nomad/Documents/Redes2/Redes_2/practica1/src/main/java/org/cli/server/Product.java
 /home/nomad/Documents/Redes2/Redes_2/practica1/src/main/java/org/example/server/ClientHandler.java
