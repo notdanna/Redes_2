@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "titulo": "宇宙ネコ子",
+    "artista": "Uchu",
+    "archivo": "Love.mp3",
+    "cover": "uchu.jpg"
+  },
+  {
+    "id": 2,
+    "titulo": "WhatOnceWas",
+    "artista": "Hers",
+    "archivo": "WhatOnceWas.mp3",
+    "cover": "hers.jpg"
+  },
+  {
+    "id": 3,
+    "titulo": "Nude",
+    "artista": "Radiohead",
+    "archivo": "Nude.mp3",
+    "cover": "radio.jpg"
+  },
+  {
+    "id": 4,
+    "titulo": "VeoTanDentro",
+    "artista": "Depresion",
+    "archivo": "VeoTanDentro.mp3",
+    "cover": "dep.jpg"
+  },
+  {
+    "id": 5,
+    "titulo": "TeenageDirbag",
+    "artista": "Weathus",
+    "archivo": "TeenageDirtbag.mp3",
+    "cover": "wea.jpg"
+  }
+]
