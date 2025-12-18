@@ -241,7 +241,7 @@ public class Receiver {
         }
 
         try {
-            Receiver receiver = new Receiver(listenPort, senderIp, senderPort, songId, title, artist, mp3Name, coverName);
+            Receiver receiver = new Receiver( listenPort, senderIp, senderPort, songId, title, artist, mp3Name, coverName);
             receiver.receive();
         } catch (IOException e) {
             System.err.println("Error: " + e.getMessage());
