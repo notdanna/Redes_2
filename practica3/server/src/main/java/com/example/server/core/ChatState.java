@@ -7,20 +7,35 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ChatState {
+
+    /* Un ConcurrentHashMap
+
+    Permite que varios hilos lean/escriban en el mapa al mismo tiempo.
+    Evita bloqueos en operaciones. ¿Como un semaforo?
+    - Cada request HTTP puede ejecutarse en un hilo distinto.
+    - Tareas async (@Async), schedulers o listeners pueden acceder al mismo mapa.
+    - Manejo de sockets (UDP en tu caso) suele ser multihilo.
+     */
+    // Nombres de usuario
     private final Map<String, InetSocketAddress> udpUsers = new ConcurrentHashMap<>();
 
+    // Para mapear los web sockets
     private final Map<WebSocketSession, String> wsUsers = new ConcurrentHashMap<>();
 
+    // Nombres de las salas
     private final Map<String, Set<String>> rooms = new ConcurrentHashMap<>();
 
+    // Usa la dirección del usuario UDP para registrar
     public void registerUdpUser(String username, InetSocketAddress address) {
         udpUsers.put(username, address);
     }
 
+    // Obtener la dirección del usuario UDP
     public InetSocketAddress getUdpUser(String username) {
         return udpUsers.get(username);
     }
 
+    // Elimina un usuario y lo saca de todas las salas(rooms)
     public void removeUdpUser(String username) {
         udpUsers.remove(username);
         leaveAllRooms(username);
@@ -30,14 +45,17 @@ public class ChatState {
         return udpUsers.keySet();
     }
 
+    // Para meter a un usuario(su nombre) a una sesión
     public void registerSession(WebSocketSession session, String username) {
         wsUsers.put(session, username);
     }
 
+    // Elimina una sesión y retorna su nombre(para saber quien salió)
     public String removeSession(WebSocketSession session) {
         return wsUsers.remove(session);
     }
 
+    // Obtiene nombre de usuario de una sesión
     public String usernameOf(WebSocketSession session) {
         return wsUsers.get(session);
     }
@@ -46,6 +64,7 @@ public class ChatState {
         return wsUsers.keySet();
     }
 
+    // Busca sesión de un usuario específico
     public Optional<WebSocketSession> sessionOfUser(String username) {
         return wsUsers.entrySet()
                 .stream()
@@ -100,6 +119,7 @@ public class ChatState {
         return result;
     }
 
+    // Retorna Set de sesiones WebSocket de usuarios en sala
     public Set<WebSocketSession> sessionsInRoom(String room) {
         Set<String> users = usersOfRoom(room);
         Set<WebSocketSession> result = new HashSet<>();

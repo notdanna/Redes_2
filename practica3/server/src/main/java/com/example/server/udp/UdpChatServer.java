@@ -24,10 +24,12 @@ public class UdpChatServer {
         this.chatState = chatState;
     }
 
+    // Iniciamos un hilo de escucha
     @PostConstruct
     public void start() {
         new Thread(this::run, "udp-chat-server").start();
     }
+
 
     private void run() {
         try {
@@ -36,6 +38,8 @@ public class UdpChatServer {
 
             byte[] buf = new byte[BUFFER_SIZE];
 
+            // Loop infinito esperando datagramas
+            // -> Por cada paquete, crea un hilo nuevo para procesarlo
             while (running) {
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
@@ -54,6 +58,8 @@ public class UdpChatServer {
         return new DatagramPacket(data, data.length, p.getAddress(), p.getPort());
     }
 
+    // bytes a UTF-8
+    // spliteamos la primer palabra para hacer el switch entre comandos
     private void handlePacket(DatagramPacket packet) {
         String raw = new String(packet.getData(), 0, packet.getLength(), StandardCharsets.UTF_8).trim();
         InetSocketAddress sender = new InetSocketAddress(packet.getAddress(), packet.getPort());

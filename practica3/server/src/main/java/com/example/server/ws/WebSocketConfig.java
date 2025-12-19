@@ -27,10 +27,11 @@ public class WebSocketConfig implements WebSocketConfigurer {
     public ServletServerContainerFactoryBean createWebSocketContainer() {
         ServletServerContainerFactoryBean container = new ServletServerContainerFactoryBean();
 
+        // tamaño maximo de los mensajes
         container.setMaxTextMessageBufferSize(50 * 1024 * 1024);
-
         container.setMaxBinaryMessageBufferSize(50 * 1024 * 1024);
 
+        // 10 min
         container.setMaxSessionIdleTimeout(600000L);
 
         System.out.println("[WS Config] Limites configurados:");
